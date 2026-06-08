@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="description" content="Calendário premium para escala 24/48 das equipes A, B e C." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Escala 24/48" />
+  <title>Escala 24/48 Premium</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="assets/icons/siren.svg" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell" aria-label="Calendário de escala 24 por 48">
+    <section class="calendar-card" aria-label="Calendário mensal com equipes">
+      <header class="calendar-topbar">
+        <button class="nav-button" id="prevMonth" type="button" aria-label="Mês anterior">
+          <span aria-hidden="true">‹</span>
+        </button>
+
+        <div class="month-stack">
+          <div class="app-badge">
+            <img src="assets/icons/siren.svg" alt="" aria-hidden="true" />
+            <span>Escala 24/48</span>
+          </div>
+          <h1 id="monthTitle">Calendário</h1>
+          <p id="todayLabel" class="today-label">Hoje</p>
+        </div>
+
+        <button class="nav-button" id="nextMonth" type="button" aria-label="Próximo mês">
+          <span aria-hidden="true">›</span>
+        </button>
+      </header>
+
+      <div class="team-legend" aria-label="Legenda das equipes">
+        <span class="legend-item team-a"><i></i>Equipe A</span>
+        <span class="legend-item team-b"><i></i>Equipe B</span>
+        <span class="legend-item team-c"><i></i>Equipe C</span>
+      </div>
+
+      <div class="weekday-grid" aria-hidden="true">
+        <span>Dom</span>
+        <span>Seg</span>
+        <span>Ter</span>
+        <span>Qua</span>
+        <span>Qui</span>
+        <span>Sex</span>
+        <span>Sáb</span>
+      </div>
+
+      <div id="calendarViewport" class="calendar-viewport">
+        <div id="calendarGrid" class="calendar-grid" role="grid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <aside id="installBanner" class="install-banner" aria-live="polite" hidden>
+    <div class="install-icon" aria-hidden="true">
+      <img src="assets/icons/siren.svg" alt="" />
+    </div>
+    <div class="install-text">
+      <strong>Instalar calendário</strong>
+      <span>Acesso rápido, tela cheia e funcionamento offline.</span>
+    </div>
+    <button id="installButton" type="button">Instalar</button>
+  </aside>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

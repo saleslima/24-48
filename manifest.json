@@ -1,0 +1,25 @@
+{
+  "name": "Escala 24/48 Premium",
+  "short_name": "Escala 24/48",
+  "description": "Calendário premium de escala 24/48 para equipes A, B e C.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#020817",
+  "theme_color": "#07111f",
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
