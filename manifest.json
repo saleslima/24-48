@@ -1,8 +1,8 @@
 {
-  "id": "./",
-  "name": "ROTA Escala 24/48",
-  "short_name": "ROTA Escala",
-  "description": "Calendário premium ROTA de escala 24/48 para equipes A, B e C, com modo claro/escuro e instalação em iOS e Android.",
+  "id": "/?app=apmssp",
+  "name": "APMSSP",
+  "short_name": "APMSSP",
+  "description": "Calendário de escala APMSSP com suporte PWA para iOS e Android.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -12,8 +12,8 @@
     "browser"
   ],
   "orientation": "portrait-primary",
-  "background_color": "#050505",
-  "theme_color": "#050505",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "categories": [
     "productivity",
     "utilities"
