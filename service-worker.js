@@ -1,11 +1,11 @@
-const CACHE_NAME = 'apmssp-escala-24x48-v3-ios-android';
+const CACHE_NAME = 'apmpmsp-escala-24x48-v4-ios-android';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './manifest.json',
-  './assets/icons/logo-apmssp.png',
+  './assets/icons/logo-rota.png',
   './assets/icons/favicon-16.png',
   './assets/icons/favicon-32.png',
   './assets/icons/icon-192.png',

@@ -1,8 +1,8 @@
 {
-  "id": "/?app=apmssp",
-  "name": "APMSSP",
-  "short_name": "APMSSP",
-  "description": "Calendário de escala APMSSP com suporte PWA para iOS e Android.",
+  "id": "/?app=apmpmsp",
+  "name": "APMPMSP",
+  "short_name": "APMPMSP",
+  "description": "Calendário de escala APMPMSP com suporte PWA para iOS e Android.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

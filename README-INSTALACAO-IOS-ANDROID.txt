@@ -39,9 +39,9 @@ OBSERVAÇÕES IMPORTANTES
 - É um projeto estático: basta hospedar os arquivos.
 
 
-ATUALIZAÇÃO APMSSP
+ATUALIZAÇÃO APMPMSP
 ----------------
-- O logo da APMSSP foi aplicado como ícone de instalação do app.
+- O logo da APMPMSP foi aplicado como ícone de instalação do app.
 - Foram gerados favicon, Apple Touch Icon, ícones Android 192x192/512x512 e ícones maskable.
-- O tema visual foi ajustado para as cores da APMSSP: preto e amarelo.
+- O tema visual foi ajustado para as cores da APMPMSP: preto e amarelo.
 - O modo claro e o modo escuro continuam disponíveis pelo botão Tema.
