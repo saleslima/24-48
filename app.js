@@ -1,12 +1,12 @@
 (() => {
   'use strict';
 
-  const STORAGE_KEY = 'escala_24x48_premium_config_v1';
-
+  const STORAGE_KEY = 'escala_24x48_premium_config_v2';
+  const INSTALL_DISMISSED_KEY = 'escala_24x48_install_dismissed_v1';
   const teams = ['A', 'B', 'C'];
   const config = loadConfig();
   const baseDate = toDate(config.baseDate);
-  const baseTeamIndex = teams.indexOf(config.baseTeam);
+  const baseTeamIndex = teams.includes(config.baseTeam) ? teams.indexOf(config.baseTeam) : 0;
 
   const monthTitle = document.getElementById('monthTitle');
   const todayLabel = document.getElementById('todayLabel');
@@ -16,9 +16,21 @@
   const nextButton = document.getElementById('nextMonth');
   const installBanner = document.getElementById('installBanner');
   const installButton = document.getElementById('installButton');
+  const dismissInstall = document.getElementById('dismissInstall');
+  const installTitle = document.getElementById('installTitle');
+  const installDescription = document.getElementById('installDescription');
+  const themeToggle = document.getElementById('themeToggle');
+  const themeToggleText = document.getElementById('themeToggleText');
+  const themeIcon = document.querySelector('.theme-toggle-icon');
+  const themeColorMeta = document.getElementById('themeColorMeta');
+  const teamHelp = document.getElementById('teamHelp');
+  const teamButtons = Array.from(document.querySelectorAll('.team-toggle'));
+  const legendItems = Array.from(document.querySelectorAll('.legend-item'));
 
   const today = startOfDay(new Date());
   let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  let selectedTeams = normalizeSelectedTeams(config.selectedTeams);
+  let activeTheme = normalizeTheme(config.theme);
   let deferredPrompt = null;
   let touchStartX = 0;
   let touchStartY = 0;
@@ -26,6 +38,8 @@
   init();
 
   function init() {
+    applyTheme(activeTheme);
+    syncTeamButtons();
     renderCalendar(currentMonth);
     registerEvents();
     registerServiceWorker();
@@ -37,12 +51,15 @@
       baseDate: '2026-06-02',
       baseTeam: 'B',
       teamOrder: 'A-B-C',
+      selectedTeams: ['A', 'B', 'C'],
+      theme: getPreferredTheme(),
       updatedAt: new Date().toISOString()
     };
 
     try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      const merged = { ...fallback, ...stored };
+      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      const legacy = JSON.parse(localStorage.getItem('escala_24x48_premium_config_v1')) || {};
+      const merged = { ...fallback, ...legacy, ...stored };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
       return merged;
     } catch (_) {
@@ -51,10 +68,25 @@
     }
   }
 
+  function saveConfig(partial) {
+    const next = { ...config, ...partial, updatedAt: new Date().toISOString() };
+    Object.assign(config, next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  }
 
   function registerEvents() {
     prevButton.addEventListener('click', () => changeMonth(-1));
     nextButton.addEventListener('click', () => changeMonth(1));
+
+    teamButtons.forEach((button) => {
+      button.addEventListener('click', () => toggleTeam(button.dataset.team));
+    });
+
+    themeToggle.addEventListener('click', () => {
+      activeTheme = activeTheme === 'dark' ? 'light' : 'dark';
+      saveConfig({ theme: activeTheme });
+      applyTheme(activeTheme);
+    });
 
     calendarViewport.addEventListener('touchstart', (event) => {
       const touch = event.changedTouches[0];
@@ -79,22 +111,69 @@
     window.addEventListener('beforeinstallprompt', (event) => {
       event.preventDefault();
       deferredPrompt = event;
+      showInstallHint(true);
     });
 
-    installButton.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        hideInstallHint();
-        return;
-      }
-
-      installButton.textContent = 'Use o menu do navegador';
-      setTimeout(() => {
-        installButton.textContent = 'Instalar';
-      }, 2200);
+    window.addEventListener('appinstalled', () => {
+      hideInstallHint();
+      localStorage.setItem(INSTALL_DISMISSED_KEY, '1');
     });
+
+    installButton.addEventListener('click', handleInstallClick);
+
+    dismissInstall.addEventListener('click', () => {
+      localStorage.setItem(INSTALL_DISMISSED_KEY, '1');
+      hideInstallHint();
+    });
+  }
+
+  function toggleTeam(team) {
+    if (!teams.includes(team)) return;
+
+    const isSelected = selectedTeams.includes(team);
+    if (isSelected && selectedTeams.length === 1) {
+      flashTeamHelp('Mantenha pelo menos uma equipe selecionada.');
+      return;
+    }
+
+    selectedTeams = isSelected
+      ? selectedTeams.filter((item) => item !== team)
+      : [...selectedTeams, team].sort((a, b) => teams.indexOf(a) - teams.indexOf(b));
+
+    selectedTeams = normalizeSelectedTeams(selectedTeams);
+    saveConfig({ selectedTeams });
+    syncTeamButtons();
+    renderCalendar(currentMonth);
+  }
+
+  function syncTeamButtons() {
+    teamButtons.forEach((button) => {
+      const team = button.dataset.team;
+      const selected = selectedTeams.includes(team);
+      button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+
+    legendItems.forEach((item) => {
+      const team = item.classList.contains('team-a') ? 'A' : item.classList.contains('team-b') ? 'B' : 'C';
+      item.style.opacity = selectedTeams.includes(team) ? '1' : '0.42';
+    });
+
+    teamHelp.textContent = `Selecionadas: ${selectedTeams.map((team) => `Equipe ${team}`).join(', ')}.`;
+    teamHelp.classList.remove('warn');
+  }
+
+  function flashTeamHelp(message) {
+    teamHelp.textContent = message;
+    teamHelp.classList.add('warn');
+    setTimeout(syncTeamButtons, 1800);
+  }
+
+  function applyTheme(theme) {
+    document.body.dataset.theme = theme;
+    themeToggle.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+    themeToggleText.textContent = theme === 'light' ? 'Modo claro' : 'Modo escuro';
+    themeIcon.textContent = theme === 'light' ? '☀' : '☾';
+    themeColorMeta.setAttribute('content', theme === 'light' ? '#f4c74c' : '#050505');
   }
 
   function changeMonth(direction) {
@@ -115,7 +194,6 @@
     }, 140);
   }
 
-
   function renderCalendar(monthDate) {
     const year = monthDate.getFullYear();
     const month = monthDate.getMonth();
@@ -123,12 +201,8 @@
     const lastDay = new Date(year, month + 1, 0);
     const gridStart = new Date(year, month, 1 - firstDay.getDay());
     const holidaysByDate = getHolidayMap(year);
-    if (month === 11) {
-      mergeHolidayMap(holidaysByDate, getHolidayMap(year + 1));
-    }
-    if (month === 0) {
-      mergeHolidayMap(holidaysByDate, getHolidayMap(year - 1));
-    }
+    if (month === 11) mergeHolidayMap(holidaysByDate, getHolidayMap(year + 1));
+    if (month === 0) mergeHolidayMap(holidaysByDate, getHolidayMap(year - 1));
 
     const paymentDate = getFifthBusinessDay(year, month, holidaysByDate);
     const monthName = monthDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
@@ -147,17 +221,20 @@
       const isOutside = date.getMonth() !== month;
       const isToday = sameDate(date, today);
       const isPayday = paymentDate && sameDate(date, paymentDate);
+      const isSelectedTeam = selectedTeams.includes(team);
 
       const cell = document.createElement('article');
       cell.className = [
         'day-cell',
+        `team-${team.toLowerCase()}-day`,
+        isSelectedTeam ? 'filtered-in' : 'filtered-out',
         isOutside ? 'outside' : '',
         isToday ? 'today' : '',
         holiday ? 'holiday' : '',
         isPayday ? 'payday' : ''
       ].filter(Boolean).join(' ');
       cell.setAttribute('role', 'gridcell');
-      cell.setAttribute('aria-label', buildAriaLabel(date, team, holiday, isPayday, isToday));
+      cell.setAttribute('aria-label', buildAriaLabel(date, team, holiday, isPayday, isToday, isSelectedTeam));
 
       const row = document.createElement('div');
       row.className = 'day-number-row';
@@ -205,10 +282,11 @@
     }
   }
 
-  function buildAriaLabel(date, team, holiday, isPayday, isToday) {
+  function buildAriaLabel(date, team, holiday, isPayday, isToday, isSelectedTeam) {
     const parts = [date.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })];
     if (isToday) parts.push('dia atual');
     parts.push(`equipe ${team}`);
+    parts.push(isSelectedTeam ? 'equipe selecionada' : 'equipe não selecionada no filtro');
     if (holiday) parts.push(`feriado: ${holiday.name}`);
     if (isPayday) parts.push('quinto dia útil, pagamento');
     return parts.join(', ');
@@ -284,29 +362,46 @@
     const g = Math.floor((b - f + 1) / 3);
     const h = (19 * a + b - d - g + 15) % 30;
     const i = Math.floor(c / 4);
-    const k = c % 4;
+    const k = c % 100 % 4;
     const l = (32 + 2 * e + 2 * i - h - k) % 7;
     const m = Math.floor((a + 11 * h + 22 * l) / 451);
-    const month = Math.floor((h + l - 7 * m + 114) / 31);
+    const easterMonth = Math.floor((h + l - 7 * m + 114) / 31);
     const day = ((h + l - 7 * m + 114) % 31) + 1;
-    return new Date(year, month - 1, day);
+    return new Date(year, easterMonth - 1, day);
   }
 
   function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').catch(() => undefined);
+        navigator.serviceWorker.register('./service-worker.js').catch(() => undefined);
       });
     }
   }
 
-  function showInstallHint() {
-    const standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  function showInstallHint(force = false) {
+    const standalone = isStandaloneMode();
     if (standalone || !installBanner) return;
+    if (!force && localStorage.getItem(INSTALL_DISMISSED_KEY) === '1') return;
+
+    const platform = detectPlatform();
+    if (platform === 'ios') {
+      installTitle.textContent = 'Instalar no iPhone/iPad';
+      installDescription.textContent = 'No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.';
+      installButton.textContent = 'Ver dica';
+    } else if (platform === 'android') {
+      installTitle.textContent = 'Instalar no Android';
+      installDescription.textContent = deferredPrompt
+        ? 'Toque em Instalar para adicionar o app à tela inicial.'
+        : 'No Chrome, abra o menu ⋮ e escolha Instalar app ou Adicionar à tela inicial.';
+      installButton.textContent = deferredPrompt ? 'Instalar' : 'Ver dica';
+    } else {
+      installTitle.textContent = 'Instalar calendário';
+      installDescription.textContent = 'Use a opção de instalação do navegador para abrir em tela cheia e offline.';
+      installButton.textContent = deferredPrompt ? 'Instalar' : 'Ver dica';
+    }
 
     installBanner.hidden = false;
     requestAnimationFrame(() => installBanner.classList.add('show'));
-    window.setTimeout(hideInstallHint, 5000);
   }
 
   function hideInstallHint() {
@@ -315,6 +410,56 @@
     window.setTimeout(() => {
       installBanner.hidden = true;
     }, 230);
+  }
+
+  async function handleInstallClick() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      hideInstallHint();
+      return;
+    }
+
+    const platform = detectPlatform();
+    if (platform === 'ios') {
+      installDescription.textContent = 'Safari: toque no botão Compartilhar, role as opções e escolha Adicionar à Tela de Início.';
+    } else if (platform === 'android') {
+      installDescription.textContent = 'Chrome/Edge: abra o menu ⋮ e escolha Instalar app ou Adicionar à tela inicial.';
+    } else {
+      installDescription.textContent = 'Procure o ícone de instalação na barra do navegador ou use o menu do navegador.';
+    }
+  }
+
+  function detectPlatform() {
+    const userAgent = window.navigator.userAgent || '';
+    const platform = window.navigator.platform || '';
+    const maxTouchPoints = window.navigator.maxTouchPoints || 0;
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent) || (platform === 'MacIntel' && maxTouchPoints > 1);
+    if (isIOS) return 'ios';
+    if (/Android/i.test(userAgent)) return 'android';
+    return 'desktop';
+  }
+
+  function isStandaloneMode() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function normalizeSelectedTeams(value) {
+    const list = Array.isArray(value) ? value : String(value || '').split(/[,-]/);
+    const unique = list
+      .map((team) => String(team).trim().toUpperCase())
+      .filter((team, index, array) => teams.includes(team) && array.indexOf(team) === index)
+      .sort((a, b) => teams.indexOf(a) - teams.indexOf(b));
+    return unique.length ? unique.slice(0, 3) : ['A', 'B', 'C'];
+  }
+
+  function normalizeTheme(theme) {
+    return theme === 'light' || theme === 'dark' ? theme : getPreferredTheme();
+  }
+
+  function getPreferredTheme() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   }
 
   function toDate(iso) {

@@ -1,22 +1,22 @@
 :root {
-  --bg-0: #020817;
-  --bg-1: #07111f;
-  --bg-2: #0b1628;
-  --card: rgba(10, 22, 40, 0.78);
-  --card-border: rgba(255, 255, 255, 0.13);
-  --text: #f7fbff;
-  --muted: #94a3b8;
-  --subtle: #cbd5e1;
-  --line: rgba(148, 163, 184, 0.18);
-  --today: #f8fafc;
-  --gold: #ffd166;
-  --holiday: #ff6b6b;
-  --team-a: #22c55e;
-  --team-a-bg: rgba(34, 197, 94, 0.16);
-  --team-b: #38bdf8;
-  --team-b-bg: rgba(56, 189, 248, 0.17);
-  --team-c: #f59e0b;
-  --team-c-bg: rgba(245, 158, 11, 0.17);
+  --bg-0: #050505;
+  --bg-1: #101010;
+  --bg-2: #191307;
+  --card: rgba(12, 12, 12, 0.88);
+  --card-border: rgba(244, 199, 76, 0.28);
+  --text: #fff7da;
+  --muted: #d6b75a;
+  --subtle: #f2d477;
+  --line: rgba(244, 199, 76, 0.20);
+  --today: #f4c74c;
+  --gold: #f4c74c;
+  --holiday: #ffd45f;
+  --team-a: #f4c74c;
+  --team-a-bg: rgba(244, 199, 76, 0.18);
+  --team-b: #ffe08a;
+  --team-b-bg: rgba(255, 224, 138, 0.16);
+  --team-c: #c9961a;
+  --team-c-bg: rgba(201, 150, 26, 0.20);
   --radius-xl: 34px;
   --radius-lg: 24px;
   --radius-md: 16px;
@@ -39,10 +39,10 @@ body {
   margin: 0;
   color: var(--text);
   background:
-    radial-gradient(circle at 18% 10%, rgba(56, 189, 248, 0.22), transparent 28%),
-    radial-gradient(circle at 86% 18%, rgba(245, 158, 11, 0.17), transparent 24%),
-    radial-gradient(circle at 50% 90%, rgba(34, 197, 94, 0.13), transparent 32%),
-    linear-gradient(135deg, var(--bg-0), var(--bg-1) 42%, #111827);
+    radial-gradient(circle at 18% 10%, rgba(244, 199, 76, 0.22), transparent 28%),
+    radial-gradient(circle at 86% 18%, rgba(255, 224, 138, 0.16), transparent 24%),
+    radial-gradient(circle at 50% 90%, rgba(201, 150, 26, 0.13), transparent 32%),
+    linear-gradient(135deg, var(--bg-0), var(--bg-1) 42%, #1a1304);
   overflow-x: hidden;
 }
 
@@ -163,8 +163,11 @@ button {
 }
 
 .app-badge img {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(244,199,76,0.45), 0 0 18px rgba(244,199,76,0.18);
 }
 
 h1 {
@@ -324,7 +327,7 @@ h1 {
 }
 
 .today .day-number {
-  color: #07111f;
+  color: #050505;
   background: var(--today);
 }
 
@@ -376,21 +379,21 @@ h1 {
 }
 
 .team-pill.team-a {
-  color: #d9ffe9;
+  color: #fff0b0;
   background: var(--team-a-bg);
-  border: 1px solid rgba(34,197,94,0.34);
+  border: 1px solid rgba(244,199,76,0.46);
 }
 
 .team-pill.team-b {
-  color: #dff6ff;
+  color: #fff7d6;
   background: var(--team-b-bg);
-  border: 1px solid rgba(56,189,248,0.36);
+  border: 1px solid rgba(255,224,138,0.42);
 }
 
 .team-pill.team-c {
-  color: #fff1d6;
+  color: #f7d36f;
   background: var(--team-c-bg);
-  border: 1px solid rgba(245,158,11,0.36);
+  border: 1px solid rgba(201,150,26,0.46);
 }
 
 .holiday-name {
@@ -418,7 +421,7 @@ h1 {
   padding: 12px;
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 22px;
-  background: rgba(5, 12, 24, 0.92);
+  background: rgba(5, 5, 5, 0.94);
   box-shadow: 0 26px 70px rgba(0,0,0,0.45);
   backdrop-filter: blur(18px);
   transform: translateX(-50%) translateY(18px);
@@ -437,12 +440,15 @@ h1 {
   display: grid;
   place-items: center;
   border-radius: 16px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(244,199,76,0.12);
+  border: 1px solid rgba(244,199,76,0.28);
 }
 
 .install-icon img {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .install-text {
@@ -471,8 +477,8 @@ h1 {
   padding: 0 15px;
   border: 0;
   border-radius: 14px;
-  color: #07111f;
-  background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+  color: #050505;
+  background: linear-gradient(135deg, #ffe89e, #f4c74c);
   font-size: 13px;
   font-weight: 950;
   cursor: pointer;
@@ -667,5 +673,272 @@ h1 {
 @media (display-mode: standalone) {
   .install-banner {
     display: none !important;
+  }
+}
+
+/* Atualização: seleção múltipla de equipes, modo claro/escuro e PWA iOS/Android */
+:root {
+  color-scheme: dark;
+}
+
+body[data-theme="light"] {
+  --bg-0: #fff7df;
+  --bg-1: #fffbef;
+  --bg-2: #f7e6b2;
+  --card: rgba(255, 252, 242, 0.90);
+  --card-border: rgba(113, 82, 5, 0.24);
+  --text: #17120a;
+  --muted: #7a5d13;
+  --subtle: #4a3510;
+  --line: rgba(113, 82, 5, 0.18);
+  --today: #050505;
+  --shadow: 0 28px 80px rgba(77, 55, 7, 0.18);
+  color-scheme: light;
+  background:
+    radial-gradient(circle at 18% 10%, rgba(244, 199, 76, 0.22), transparent 28%),
+    radial-gradient(circle at 86% 18%, rgba(255, 224, 138, 0.22), transparent 24%),
+    radial-gradient(circle at 50% 90%, rgba(201, 150, 26, 0.15), transparent 32%),
+    linear-gradient(135deg, var(--bg-0), var(--bg-1) 42%, #fffdf5);
+}
+
+body[data-theme="light"]::before {
+  background-image:
+    linear-gradient(rgba(15,23,42,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,0.035) 1px, transparent 1px);
+}
+
+body[data-theme="light"] .calendar-card,
+body[data-theme="light"] .controls-panel,
+body[data-theme="light"] .legend-item,
+body[data-theme="light"] .app-badge,
+body[data-theme="light"] .nav-button,
+body[data-theme="light"] .team-toggle,
+body[data-theme="light"] .theme-toggle,
+body[data-theme="light"] .badge-icon {
+  background-color: rgba(255, 255, 255, 0.62);
+}
+
+body[data-theme="light"] .today .day-number {
+  color: #ffffff;
+  background: var(--today);
+}
+
+body[data-theme="light"] .holiday-name {
+  color: #7a4f00;
+}
+
+body[data-theme="light"] .install-banner {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 26px 70px rgba(15,23,42,0.18);
+}
+
+.controls-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: stretch;
+  margin: 0 0 14px;
+  padding: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  background: rgba(255,255,255,0.055);
+}
+
+.control-group {
+  min-width: 0;
+}
+
+.control-label {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.team-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.team-toggle,
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  color: var(--subtle);
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 950;
+  transition: transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.team-toggle:hover,
+.theme-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.team-toggle i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  box-shadow: 0 0 18px currentColor;
+}
+
+.team-toggle.team-a i { background: var(--team-a); color: var(--team-a); }
+.team-toggle.team-b i { background: var(--team-b); color: var(--team-b); }
+.team-toggle.team-c i { background: var(--team-c); color: var(--team-c); }
+
+.team-toggle[aria-pressed="true"] {
+  color: var(--text);
+  border-color: currentColor;
+}
+
+.team-toggle[aria-pressed="false"] {
+  opacity: 0.58;
+}
+
+.team-toggle[aria-pressed="false"] i {
+  filter: grayscale(1);
+  opacity: 0.65;
+}
+
+.control-help {
+  display: block;
+  min-height: 16px;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.control-help.warn {
+  color: var(--gold);
+}
+
+.theme-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.theme-toggle {
+  white-space: nowrap;
+}
+
+.theme-toggle-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+}
+
+.day-cell.filtered-out {
+  opacity: 0.2;
+  filter: grayscale(0.85);
+}
+
+.day-cell.filtered-out .team-pill {
+  opacity: 0.54;
+}
+
+.day-cell.filtered-in {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.day-cell.filtered-in.team-a-day {
+  border-color: rgba(244, 199, 76, 0.58);
+}
+
+.day-cell.filtered-in.team-b-day {
+  border-color: rgba(255, 224, 138, 0.54);
+}
+
+.day-cell.filtered-in.team-c-day {
+  border-color: rgba(201, 150, 26, 0.58);
+}
+
+.install-banner {
+  grid-template-columns: 48px 1fr auto auto;
+}
+
+.install-dismiss {
+  width: 38px;
+  min-height: 38px !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.13) !important;
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+body[data-theme="light"] .install-dismiss {
+  background: rgba(15, 23, 42, 0.07) !important;
+  border-color: rgba(15, 23, 42, 0.11) !important;
+}
+
+@media (max-width: 720px) {
+  .controls-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-group {
+    align-items: stretch;
+  }
+
+  .theme-toggle {
+    width: 100%;
+  }
+
+  .team-toggle {
+    flex: 1 1 calc(33.333% - 8px);
+    padding-inline: 8px;
+  }
+}
+
+@media (max-width: 560px) {
+  .controls-panel {
+    gap: 10px;
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .team-toggle,
+  .theme-toggle {
+    min-height: 39px;
+    font-size: 11px;
+  }
+
+  .install-banner {
+    grid-template-columns: 42px 1fr 34px;
+  }
+
+  .install-banner #installButton {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .install-dismiss {
+    grid-column: auto !important;
+    width: 34px;
+    min-height: 34px !important;
   }
 }
